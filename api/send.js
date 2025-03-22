@@ -1,7 +1,8 @@
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const { Buffer } = await import('buffer');
+import { Buffer } from 'buffer';
+
 
 export default async function handler(req, res) {
   res.status(200).json({ message: "Transakcja jest wysyłana w tle 🚀" });
