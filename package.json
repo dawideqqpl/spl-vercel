@@ -1,0 +1,19 @@
+{
+  "name": "spljs",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bs58": "^6.0.0",
+    "buffer": "^6.0.3",
+    "node-fetch": "^3.3.2",
+    "tweetnacl": "^1.0.3"
+  }
+}
