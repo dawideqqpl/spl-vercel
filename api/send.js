@@ -1,7 +1,16 @@
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import fetch from 'node-fetch';
+import fetchOrig from 'node-fetch';
 import { Buffer } from 'buffer';
+
+
+const fetch = (url, opts) =>
+  Promise.race([
+    fetchOrig(url, opts),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("⏰ fetch timeout")), 8000)
+    )
+  ]);
 
 export default async function handler(req, res) {
   res.status(200).json({ message: "Transakcja wysyłana..." });
@@ -164,12 +173,12 @@ async function getRecentBlockhash(RPC_URL) {
   try {
     const res = await fetch(RPC_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: 1,
         method: 'getLatestBlockhash'
-      }),
-      headers: { 'Content-Type': 'application/json' }
+      })
     });
 
     console.log("📩 Odpowiedź odebrana, parsuję JSON...");
@@ -181,11 +190,13 @@ async function getRecentBlockhash(RPC_URL) {
     }
 
     return json.result.value.blockhash;
-  } catch (e) {
-    console.error("🔥 Błąd w getRecentBlockhash:", e);
-    throw e;
+
+  } catch (err) {
+    console.error("🔥 Błąd pobierania blockhash:", err);
+    throw err;
   }
 }
+
 
 
 
