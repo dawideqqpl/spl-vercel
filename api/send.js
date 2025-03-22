@@ -160,25 +160,33 @@ function buildMessage({ payer, recentBlockhash, instructions }) {
 
 async function getRecentBlockhash(RPC_URL) {
   console.log("🌐 Pobieram blockhash...");
-  const res = await fetch(RPC_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'getLatestBlockhash'
-    }),
-    headers: { 'Content-Type': 'application/json' }
-  });
 
-  const json = await res.json();
-  console.log("📩 Odpowiedź blockhash:", JSON.stringify(json));
+  try {
+    const res = await fetch(RPC_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'getLatestBlockhash'
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-  if (!json?.result?.value?.blockhash) {
-    throw new Error("❌ Brak blockhash w odpowiedzi RPC");
+    console.log("📩 Odpowiedź odebrana, parsuję JSON...");
+    const json = await res.json();
+    console.log("📦 JSON odebrany:", JSON.stringify(json));
+
+    if (!json?.result?.value?.blockhash) {
+      throw new Error("❌ Brak blockhash w odpowiedzi RPC");
+    }
+
+    return json.result.value.blockhash;
+  } catch (e) {
+    console.error("🔥 Błąd w getRecentBlockhash:", e);
+    throw e;
   }
-
-  return json.result.value.blockhash;
 }
+
 
 
 async function getATA(wallet, mint, RPC_URL) {
