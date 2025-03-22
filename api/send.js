@@ -1,6 +1,6 @@
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+import fetch from 'node-fetch';
 import { Buffer } from 'buffer';
 
 
