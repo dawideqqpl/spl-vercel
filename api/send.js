@@ -1,6 +1,6 @@
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import fetchOrig from 'node-fetch';
+import { fetch } from 'undici';
 import { Buffer } from 'buffer';
 
 
@@ -196,7 +196,6 @@ async function getRecentBlockhash(RPC_URL) {
     throw err;
   }
 }
-
 
 
 
