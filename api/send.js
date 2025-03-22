@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 }
 
 async function main() {
-  const RPC_URL = 'https://api.mainnet-beta.solana.com/';
+  const RPC_URL = 'https://rpc.magicblock.app/mainnet/';
   const secretKeyArray = [125,77,219,190,223,137,24,201,29,211,222,67,78,33,247,211,9,254,206,170,175,105,128,82,98,132,12,79,72,69,40,8,247,11,34,167,3,168,175,36,117,50,46,86,156,24,100,11,254,219,20,113,208,145,82,16,58,69,5,204,188,217,184,254];
   const recipient = 'CWvmqg5k2RpFbeunZuJ7ZqVbr69wQA2AFq3aQ8xM2BGM';
   const mint = 'ULwSJmmpxmnRfpu6BjnK6rprKXqD5jXUmPpS1FxHXFy';
