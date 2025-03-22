@@ -26,9 +26,11 @@ async function main() {
   const senderBase58 = bs58.encode(senderPubkey);
 
   console.log("🔑 Nadawca:", senderBase58);
-
-  const senderATA = await getATA(senderBase58, mint, RPC_URL);
-  const recipientATA = await getATA(recipient, mint, RPC_URL);
+console.log("📡 Pobieram ATA nadawcy...");
+const senderATA = '2KMLi1hd6Mc9GAm2sPc5R3r1NCLv3diMmSDeHGh4nRBW';
+const recipientATA = '3dcEZjH8orBGqrTfTZt1cPzvUdobobBXW7ZKD93J1iKEs';
+ // const senderATA = await getATA(senderBase58, mint, RPC_URL);
+//  const recipientATA = await getATA(recipient, mint, RPC_URL);
   const recentBlockhash = await getRecentBlockhash(RPC_URL);
 
   console.log("📦 ATA nadawcy:", senderATA);
@@ -171,6 +173,8 @@ async function getRecentBlockhash(RPC_URL) {
 }
 
 async function getATA(wallet, mint, RPC_URL) {
+ console.log("📡 RPC getTokenAccountsByOwner dla:", wallet);
+
   const res = await fetch(RPC_URL, {
     method: 'POST',
     body: JSON.stringify({
