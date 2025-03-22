@@ -159,6 +159,7 @@ function buildMessage({ payer, recentBlockhash, instructions }) {
 }
 
 async function getRecentBlockhash(RPC_URL) {
+  console.log("🌐 Pobieram blockhash...");
   const res = await fetch(RPC_URL, {
     method: 'POST',
     body: JSON.stringify({
@@ -168,9 +169,17 @@ async function getRecentBlockhash(RPC_URL) {
     }),
     headers: { 'Content-Type': 'application/json' }
   });
+
   const json = await res.json();
+  console.log("📩 Odpowiedź blockhash:", JSON.stringify(json));
+
+  if (!json?.result?.value?.blockhash) {
+    throw new Error("❌ Brak blockhash w odpowiedzi RPC");
+  }
+
   return json.result.value.blockhash;
 }
+
 
 async function getATA(wallet, mint, RPC_URL) {
  console.log("📡 RPC getTokenAccountsByOwner dla:", wallet);
