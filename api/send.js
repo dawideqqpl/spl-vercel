@@ -4,13 +4,6 @@ import { fetch } from 'undici';
 import { Buffer } from 'buffer';
 
 
-const fetch = (url, opts) =>
-  Promise.race([
-    fetchOrig(url, opts),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("⏰ fetch timeout")), 8000)
-    )
-  ]);
 
 export default async function handler(req, res) {
   res.status(200).json({ message: "Transakcja wysyłana..." });
