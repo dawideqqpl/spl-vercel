@@ -163,7 +163,14 @@ function buildMessage({ payer, recentBlockhash, instructions }) {
 async function getRecentBlockhash(RPC_URL) {
   console.log("🌐 Pobieram blockhash...");
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    console.error("⏰ Timeout – przerywam fetch blockhash");
+    controller.abort();
+  }, 8000);
+
   try {
+    console.log("🧪 fetch START");
     const res = await fetch(RPC_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -171,12 +178,14 @@ async function getRecentBlockhash(RPC_URL) {
         jsonrpc: '2.0',
         id: 1,
         method: 'getLatestBlockhash'
-      })
+      }),
+      signal: controller.signal
     });
 
-    console.log("📩 Odpowiedź odebrana, parsuję JSON...");
+    console.log("📩 Odpowiedź odebrana – parsuję JSON...");
+    clearTimeout(timeout);
     const json = await res.json();
-    console.log("📦 JSON odebrany:", JSON.stringify(json));
+    console.log("📦 JSON z blockhash:", JSON.stringify(json));
 
     if (!json?.result?.value?.blockhash) {
       throw new Error("❌ Brak blockhash w odpowiedzi RPC");
