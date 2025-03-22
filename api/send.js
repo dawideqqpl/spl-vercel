@@ -4,12 +4,11 @@ import fetch from 'node-fetch';
 import { Buffer } from 'buffer';
 
 export default async function handler(req, res) {
-  res.status(200).json({ message: "Transakcja jest wysyłana w tle 🚀" });
+  res.status(200).json({ message: "Transakcja wysyłana..." });
 
-  // async fire-and-forget
-  setTimeout(() => {
-    main().catch((e) => console.error("❌ Błąd transakcji:", e));
-  }, 0);
+  main()
+    .then(() => console.log("✅ Transakcja zakończona"))
+    .catch((e) => console.error("❌ Błąd transakcji:", e));
 }
 
 async function main() {
@@ -19,14 +18,22 @@ async function main() {
   const mint = 'ULwSJmmpxmnRfpu6BjnK6rprKXqD5jXUmPpS1FxHXFy';
   const amount = 1_000_000;
 
+  console.log("▶️ Startuję main()");
+
   const secretKey = Uint8Array.from(secretKeyArray);
   const keypair = nacl.sign.keyPair.fromSecretKey(secretKey);
   const senderPubkey = keypair.publicKey;
   const senderBase58 = bs58.encode(senderPubkey);
 
+  console.log("🔑 Nadawca:", senderBase58);
+
   const senderATA = await getATA(senderBase58, mint, RPC_URL);
   const recipientATA = await getATA(recipient, mint, RPC_URL);
   const recentBlockhash = await getRecentBlockhash(RPC_URL);
+
+  console.log("📦 ATA nadawcy:", senderATA);
+  console.log("📥 ATA odbiorcy:", recipientATA);
+  console.log("🧱 Blockhash:", recentBlockhash);
 
   const ix = {
     programId: bs58.decode('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'),
@@ -60,7 +67,7 @@ async function main() {
   });
 
   const json = await resTx.json();
-  console.log("✅ Wynik transakcji:", json);
+  console.log("📤 Odpowiedź RPC:", json);
 }
 
 function writeUInt64LE(value) {
